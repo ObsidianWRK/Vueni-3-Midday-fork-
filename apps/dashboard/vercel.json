@@ -4,7 +4,10 @@
   "github": {
     "enabled": false
   },
-  "regions": ["fra1", "iad1", "sfo1"],
+  "regions": ["iad1"],
+  "buildCommand": "cd ../.. && bun install && cd apps/dashboard && bun run build",
+  "installCommand": "echo 'Skipping install, using root install'",
+  "outputDirectory": ".next",
   "headers": [
     {
       "source": "/_next/static/:path*",
