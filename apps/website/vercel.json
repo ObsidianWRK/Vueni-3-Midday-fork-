@@ -4,5 +4,9 @@
   "github": {
     "enabled": false
   },
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "installCommand": "bun install --cwd ../..",
+  "buildCommand": "cd ../.. && turbo build --filter=@midday/website",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
 }

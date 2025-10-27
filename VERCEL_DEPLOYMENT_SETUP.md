@@ -5,8 +5,8 @@
 - ✅ Vercel CLI is installed and authenticated
 - ✅ Projects linked to Vercel team: "Damon Kirk's projects"
 - ✅ Vercel configurations updated for single-region deployment (iad1)
-- ✅ Dashboard vercel.json updated with correct build commands
-- ⚠️ **IMPORTANT:** Root Directory must be set in Vercel Dashboard to `apps/dashboard`
+- ✅ All vercel.json files updated with correct build commands using `bun install --cwd`
+- ⚠️ **CRITICAL:** Root Directory MUST be set in Vercel Dashboard for each project
 - ⏳ Supabase project needs to be created/setup
 - ⏳ Environment variables need to be configured
 
@@ -94,17 +94,31 @@ vercel --prod --yes
 
 ## Deploy via Vercel Dashboard (Recommended for Monorepos)
 
-For monorepo deployments, it's best to configure Root Directory in the Vercel Dashboard:
+For monorepo deployments, you MUST configure Root Directory in the Vercel Dashboard. This is **critical** - the deployment will fail without it.
 
-1. Go to your project: https://vercel.com/team_M8ZkinGzi726gTb8ciEL1DCJ/dashboard/settings
+### Configuration Steps for Each App
+
+#### 1. Dashboard App
+1. Go to: https://vercel.com/team_M8ZkinGzi726gTb8ciEL1DCJ/dashboard/settings
 2. In **General → Root Directory**, set to: `apps/dashboard`
-3. In **Build & Development Settings**:
-   - Framework Preset: Auto-detect (should detect Next.js)
-   - Build Command: `turbo build --filter=@midday/dashboard` (or leave empty for auto-detection)
-   - Install Command: `cd ../.. && bun install`
-   - Output Directory: `.next`
-4. Add environment variables in the project settings
-5. Save and trigger a new deployment
+3. Save the settings
+4. Add environment variables (see below)
+5. Trigger a new deployment
+
+#### 2. Website App
+1. Go to the Website project settings
+2. In **General → Root Directory**, set to: `apps/website`
+3. Save the settings
+4. Add environment variables if needed
+5. Trigger a new deployment
+
+#### 3. Email App
+1. Go to the Email project settings
+2. In **General → Root Directory**, set to: `packages/email`
+3. Save the settings
+4. Trigger a new deployment
+
+**Note:** Build and install commands are already configured in `vercel.json` files. You don't need to set them manually in the Dashboard.
 
 ## Deployment URLs
 
@@ -114,6 +128,25 @@ After deployment, your apps will be available at:
 - Email: `https://email-<hash>-damon-kirks-projects.vercel.app`
 
 ## Troubleshooting
+
+### Build Failure: "Bun could not find a package.json file"
+
+**Error:** 
+```
+error: Bun could not find a package.json file to install from
+note: Run "bun init" to initialize a project
+Error: Command "cd ../.. && bun install" exited with 1
+```
+
+**Cause:** This happens when:
+1. Root Directory is NOT set in Vercel Dashboard
+2. The old install command tried to go up too many directory levels
+
+**Solution:** 
+1. Go to your Vercel project settings
+2. Set **Root Directory** to the appropriate app directory (`apps/dashboard`, `apps/website`, or `packages/email`)
+3. The `vercel.json` files now use `bun install --cwd ../..` which works correctly with Root Directory set
+4. Trigger a new deployment
 
 ### Next.js Not Detected Error
 
@@ -133,16 +166,19 @@ After deployment, your apps will be available at:
 
 ### Current Configuration
 
-The `apps/dashboard/vercel.json` has been updated with:
+All `vercel.json` files have been updated with:
+- Files: `apps/dashboard/vercel.json`, `apps/website/vercel.json`, and `packages/email/vercel.json`
 - `framework: "nextjs"` - Explicitly tells Vercel this is a Next.js project
-- `buildCommand: "turbo build --filter=@midday/dashboard"` - Uses Turbo for monorepo builds
-- `installCommand: "cd ../.. && bun install"` - Installs from monorepo root
+- `buildCommand: "cd ../.. && turbo build --filter=@midday/<app>"` - Uses Turbo for monorepo builds
+- `installCommand: "bun install --cwd ../.."` - Installs from monorepo root without directory context issues
+- `outputDirectory: ".next"` - For Next.js apps
+- `regions: ["iad1"]` - Single region deployment
 
 ### Build Errors
 - Ensure all dependencies are in `package.json`
 - Check turbo.json configuration
 - Verify root package.json has correct scripts
-- Make sure Root Directory is set correctly in Vercel project settings
+- **Make sure Root Directory is set correctly in Vercel project settings** (this is the #1 issue!)
 
 ### Multiple Regions Error
 - Configurations already updated to use only `iad1` region

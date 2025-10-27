@@ -5,8 +5,8 @@
     "enabled": false
   },
   "regions": ["iad1"],
-  "buildCommand": "turbo build --filter=@midday/dashboard",
-  "installCommand": "cd ../.. && bun install",
+  "installCommand": "bun install --cwd ../..",
+  "buildCommand": "cd ../.. && turbo build --filter=@midday/dashboard",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "headers": [
