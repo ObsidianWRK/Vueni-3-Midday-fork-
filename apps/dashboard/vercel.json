@@ -5,9 +5,10 @@
     "enabled": false
   },
   "regions": ["iad1"],
-  "buildCommand": "cd ../.. && bun install && cd apps/dashboard && bun run build",
-  "installCommand": "echo 'Skipping install, using root install'",
+  "buildCommand": "turbo build --filter=@midday/dashboard",
+  "installCommand": "cd ../.. && bun install",
   "outputDirectory": ".next",
+  "framework": "nextjs",
   "headers": [
     {
       "source": "/_next/static/:path*",

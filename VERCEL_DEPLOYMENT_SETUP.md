@@ -5,6 +5,8 @@
 - ✅ Vercel CLI is installed and authenticated
 - ✅ Projects linked to Vercel team: "Damon Kirk's projects"
 - ✅ Vercel configurations updated for single-region deployment (iad1)
+- ✅ Dashboard vercel.json updated with correct build commands
+- ⚠️ **IMPORTANT:** Root Directory must be set in Vercel Dashboard to `apps/dashboard`
 - ⏳ Supabase project needs to be created/setup
 - ⏳ Environment variables need to be configured
 
@@ -90,17 +92,19 @@ vercel --prod --yes
    - Run the commands above in each app directory
    - When prompted, paste the values from Supabase
 
-## Alternative: Deploy via Vercel Dashboard
+## Deploy via Vercel Dashboard (Recommended for Monorepos)
 
-If you prefer using the web interface:
+For monorepo deployments, it's best to configure Root Directory in the Vercel Dashboard:
 
-1. Go to https://vercel.com/damon-kirks-projects
-2. For each app, add the corresponding project
-3. Configure:
-   - Root Directory: `apps/dashboard`, `apps/website`, or `packages/email`
+1. Go to your project: https://vercel.com/team_M8ZkinGzi726gTb8ciEL1DCJ/dashboard/settings
+2. In **General → Root Directory**, set to: `apps/dashboard`
+3. In **Build & Development Settings**:
+   - Framework Preset: Auto-detect (should detect Next.js)
+   - Build Command: `turbo build --filter=@midday/dashboard` (or leave empty for auto-detection)
    - Install Command: `cd ../.. && bun install`
-   - Build Command: `turbo build --filter=<package-name>`
+   - Output Directory: `.next`
 4. Add environment variables in the project settings
+5. Save and trigger a new deployment
 
 ## Deployment URLs
 
@@ -111,10 +115,34 @@ After deployment, your apps will be available at:
 
 ## Troubleshooting
 
+### Next.js Not Detected Error
+
+**Error:** `Error: No Next.js version detected. Make sure your package.json has "next" in either "dependencies" or "devDependencies"`
+
+**Cause:** This happens when Vercel is looking for Next.js at the repository root, but the Next.js app is in a subdirectory (e.g., `apps/dashboard`).
+
+**Solution:** Set the **Root Directory** in your Vercel project settings:
+
+1. Navigate to: https://vercel.com/team_M8ZkinGzi726gTb8ciEL1DCJ/dashboard/settings (or your project settings)
+2. Scroll to **General** → **Root Directory**
+3. Enter: `apps/dashboard` (or `apps/website`, `packages/email` depending on which app)
+4. Click **Save**
+5. Trigger a new deployment
+
+**Note:** The `rootDirectory` setting cannot be configured in `vercel.json` - it must be set in the Vercel Dashboard project settings.
+
+### Current Configuration
+
+The `apps/dashboard/vercel.json` has been updated with:
+- `framework: "nextjs"` - Explicitly tells Vercel this is a Next.js project
+- `buildCommand: "turbo build --filter=@midday/dashboard"` - Uses Turbo for monorepo builds
+- `installCommand: "cd ../.. && bun install"` - Installs from monorepo root
+
 ### Build Errors
 - Ensure all dependencies are in `package.json`
 - Check turbo.json configuration
 - Verify root package.json has correct scripts
+- Make sure Root Directory is set correctly in Vercel project settings
 
 ### Multiple Regions Error
 - Configurations already updated to use only `iad1` region
