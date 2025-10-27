@@ -13,20 +13,25 @@
 ## Deployed Projects
 
 ### 1. Dashboard App
-- **Project**: `dashboard` (team_M8ZkinGzi726gTb8ciEL1DCJ)
+- **Project**: `dashboard` (prj_5kZ9MA1Mmk1ATSl1c1ncsgUSosdq)
 - **Location**: `apps/dashboard`
 - **Vercel Config**: `apps/dashboard/vercel.json`
-- **Status**: Linked to Vercel, ready for deployment
+- **Status**: Linked to Vercel, build configuration updated
+- **Root Directory**: MUST be set to `apps/dashboard` in Dashboard
 
 ### 2. Website App
+- **Project**: `website` (prj_HwQSzA455bYCnALsF2V4dCYxlwDU)
 - **Location**: `apps/website`
 - **Vercel Config**: `apps/website/vercel.json`
-- **Status**: Configuration updated, needs linking
+- **Status**: Linked to Vercel, build configuration updated
+- **Root Directory**: MUST be set to `apps/website` in Dashboard
 
 ### 3. Email App
+- **Project**: `email` (prj_VvoSjuUrKp5AcgaxrkXoiqZjmdj3)
 - **Location**: `packages/email`
 - **Vercel Config**: `packages/email/vercel.json`
-- **Status**: Configuration updated, needs linking
+- **Status**: Linked to Vercel, build configuration updated
+- **Root Directory**: MUST be set to `packages/email` in Dashboard
 
 ## Required Environment Variables
 
@@ -99,26 +104,29 @@ For monorepo deployments, you MUST configure Root Directory in the Vercel Dashbo
 ### Configuration Steps for Each App
 
 #### 1. Dashboard App
-1. Go to: https://vercel.com/team_M8ZkinGzi726gTb8ciEL1DCJ/dashboard/settings
+1. Go to: https://vercel.com/damon-kirks-projects/dashboard/settings
 2. In **General → Root Directory**, set to: `apps/dashboard`
-3. Save the settings
+3. Save the settings (this is critical - deployment will fail without it!)
 4. Add environment variables (see below)
-5. Trigger a new deployment
+5. Trigger a new deployment (Git push will auto-deploy)
 
 #### 2. Website App
-1. Go to the Website project settings
+1. Go to: https://vercel.com/damon-kirks-projects/website/settings
 2. In **General → Root Directory**, set to: `apps/website`
-3. Save the settings
+3. Save the settings (this is critical - deployment will fail without it!)
 4. Add environment variables if needed
-5. Trigger a new deployment
+5. Trigger a new deployment (Git push will auto-deploy)
 
 #### 3. Email App
-1. Go to the Email project settings
+1. Go to: https://vercel.com/damon-kirks-projects/email/settings
 2. In **General → Root Directory**, set to: `packages/email`
-3. Save the settings
-4. Trigger a new deployment
+3. Save the settings (this is critical - deployment will fail without it!)
+4. Trigger a new deployment (Git push will auto-deploy)
 
-**Note:** Build and install commands are already configured in `vercel.json` files. You don't need to set them manually in the Dashboard.
+**Important Notes:**
+- Build and install commands are already configured in `vercel.json` files - no need to set them manually
+- Root Directory **CANNOT** be set via CLI or API - it must be done manually in the Dashboard
+- Without setting Root Directory, Vercel will look for package.json at the repository root and fail
 
 ## Deployment URLs
 
